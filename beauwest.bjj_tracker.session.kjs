@@ -1,0 +1,59 @@
+BeauWest.BJJ_Tracker.Session,
+  launchpad,
+  menu,
+  menuCaption 'BJJ Sessions',
+  icon 'kabaddi',
+  caption(_browse) 'BJJ Sessions',
+  caption(_edit) 'BJJ Session',
+  o (ORDER BY Start DESC)
+
+Style,
+  string,
+  display,
+  vis _browse,
+  fc resetParam(['Style_Set_Gi.design', 'Style_Set_Gi.background', 'Style_Set_Nogi.design', 'Style_Set_Nogi.background'])
+
+Style_Buttons,
+  fieldGroup 2
+
+Style_Set_Gi,
+  bu,
+  caption 'Gi',
+  region 'Style_Buttons_1',
+  design (Style === 'Gi' ? 'raised' : 'flat'),
+  background (Style === 'Gi' ? 'a500' : 'grey300'),
+  ac {
+    Style = 'Gi';
+  }
+
+Style_Set_Nogi,
+  bu,
+  caption 'NoGi',
+  region 'Style_Buttons_2',
+  design (Style === 'NoGi' ? 'raised' : 'flat'),
+  background (Style === 'NoGi' ? 'a500' : 'grey300'),
+  ac {
+    Style = 'NoGi';
+  }
+
+Start,
+  datetime
+
+End,
+  datetime
+
+Minutes,
+  int,
+  c (SELECT (EXTRACT(EPOCH FROM (CAST(End AS timestamp) - CAST(Start AS timestamp))) / 60))
+
+Technique.Name,
+  caption 'Primary Technique'
+
+Gym,
+  join 'Gym',
+  init Last_Gym_Id
+
+Gym.Name
+
+Notes,
+  text

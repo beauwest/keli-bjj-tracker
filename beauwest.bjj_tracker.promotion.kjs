@@ -1,0 +1,17 @@
+BeauWest.BJJ_Tracker.Promotion,
+  launchpad,
+  menu,
+  menuCaption 'BJJ Promotions',
+  icon 'chevron-triple-up',
+  caption(_browse) 'BJJ Promotions',
+  caption(_edit) 'BJJ Promotion',
+  o (ORDER BY Date DESC)
+
+Date,
+  date
+
+Belt,
+  optionList ['White', 'Blue', 'Purple', 'Brown', 'Black']
+
+Stripes,
+  int

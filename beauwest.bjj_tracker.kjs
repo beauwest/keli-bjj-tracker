@@ -1,0 +1,6 @@
+BeauWest.BJJ_Tracker,
+  app
+
+Last_Gym_Id,
+  cache,
+  value q(SELECT Gym FROM Session WHERE Gym IS NOT NULL ORDER BY Start DESC LIMIT 1)
