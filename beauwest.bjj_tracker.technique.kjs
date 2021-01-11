@@ -1,3 +1,7 @@
 BeauWest.BJJ_Tracker.Technique
 
 Name
+
+Minutes,
+  int,
+  c (SELECT SUM(Minutes) FROM Session WHERE Technique = NEW.Id)
