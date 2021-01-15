@@ -2,40 +2,10 @@ BeauWest.BJJ_Tracker.Session,
   launchpad,
   menu,
   menuCaption 'BJJ Sessions',
-  icon 'kabaddi',
+  icon 'clipboard-text-outline',
   caption(_browse) 'BJJ Sessions',
   caption(_edit) 'BJJ Session',
-  o (ORDER BY Start DESC),
-  uiAllDataLoaded setToolbarStats(),
-  du(e.table === _t.dbname) setToolbarStats(),
-  reload(e.table === _t.dbname) setToolbarStats()
-
-# region 'toolbar', mode _browse
-Add_Session,
-  bu,
-  caption 'Add Session',
-  ac insert(_t.path)
-#
-
-# region 'toolbar', mode (_browse && _childname !== 'browse'), vis (_browse && _childname !== 'browse')
-Total_Gi,
-  int,
-  db off,
-  display,
-  caption 'Total Gi'
-
-Total_NoGi,
-  int,
-  db off,
-  display,
-  caption 'Total NoGi'
-
-Total_All,
-  int,
-  db off,
-  display,
-  caption 'Total'
-#
+  o (ORDER BY Start DESC)
 
 Style,
   string,
@@ -88,13 +58,3 @@ Gym.Name
 
 Notes,
   text
-
-function setToolbarStats() {
-  const stats = qk(SELECT Style, SUM(Minutes) / 60 AS Hours FROM Session GROUP BY Style, {subscribe: true, prefetch: off});
-  const gi = stats['Gi'] || 0;
-  const noGi = stats['NoGi'] || 0;
-
-  Total_Gi.displayValue = `${displayNumber(gi)} ${plural('hour', gi)}`;
-  Total_NoGi.displayValue = `${displayNumber(noGi)} ${plural('hour', noGi)}`;
-  Total_All.displayValue = `${displayNumber(gi + noGi)} ${plural('hour', gi + noGi)}`;
-}

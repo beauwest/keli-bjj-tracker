@@ -15,3 +15,11 @@ Belt,
 
 Stripes,
   int
+
+Hours,
+  caption 'Hours at Belt',
+  int,
+  c (SELECT SUM(Minutes) / 60
+     FROM Session
+     WHERE LEFT(Start, 10) >= NEW.Date
+    )

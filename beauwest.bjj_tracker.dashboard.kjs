@@ -1,0 +1,134 @@
+BeauWest.BJJ_Tracker.Dashboard,
+  db off,
+  bp mode = 'edit',
+  launchpad,
+  menu,
+  menuCaption 'BJJ Dashboard',
+  icon 'kabaddi',
+  caption(_browse) 'BJJ Dashboard',
+  caption(_edit) 'BJJ Dashboard',
+  lp {
+    Chart_Range.displayValue = 'Last 30 days';
+    updateStats();
+  },
+  du(e.table.endsWith('session')) updateStats(),
+  reload(e.table.endsWith('session')) updateStats()
+
+# region 'toolbar'
+Add_Session,
+  bu,
+  caption 'Add Session',
+  ac insert('Session')
+#
+
+--
+# display, fontScale 2, color '900'
+Total_All,
+  int,
+  db off,
+  caption 'Total Hours'
+
+Total_Gi,
+  int,
+  db off,
+  caption 'Total Gi Hours'
+
+Total_NoGi,
+  int,
+  db off,
+  caption 'Total NoGi Hours'
+#
+
+-- 'Quick Stats'
+Chart_Range,
+  string,
+  caption 'Range',
+  optionList ['Last 7 days', 'Last 14 days', 'Last 30 days', 'Last 3 months', 'Last 6 months', 'Last year', 'All time'],
+  ac {
+    resetParam('Hours_In_Range.displayValue');
+    updateCharts();
+  }
+
+# display
+Hours_In_Range,
+  int,
+  displayValue q(SELECT SUM(Minutes) / 60 FROM Session WHERE Start >= :dateTimeStamp(getChartStartingDate()))
+
+First_Day,
+  date,
+  caption 'First day of BJJ',
+  displayValue displayDate(q(SELECT MIN(Start) FROM Session))
+
+Last_Session,
+  string,
+  displayValue formatDistanceToNowStrict(q(SELECT MAX(Start) FROM Session), {@addSuffix: true})
+#
+
+--
+
+Total_Mat_Time,
+  caption 'Mat Time',
+  linechart,
+  height 200,
+  valueKeys [{name: 'hours', caption: 'Hours', color: '700', background: '100'}],
+  labelKeys [{name: 'date'}],
+  data {
+    const startingDate = _p->getChartStartingDate();
+    const sessions = qk(WITH sessions AS (SELECT Minutes, LEFT(Start, 10) AS Date FROM Session WHERE Start >= :dateTimeStamp(startingDate))
+                           SELECT
+                             Date,
+                             SUM(Minutes) / 60 AS Hours
+                             FROM sessions
+                             GROUP BY Date
+                             ORDER BY Date DESC);
+    const days = eachDayOfInterval({start: startingDate, end: parseDate('c')});
+
+    const finalData = [];
+    let cumulativeHours = q(SELECT SUM(Minutes) / 60 FROM Session WHERE Start < :dateTimeStamp(startingDate));
+    for (const day of days) {
+      cumulativeHours += sessions[dateStamp(day)] || 0;
+      finalData.push({
+        date: displayDate(day),
+        hours: cumulativeHours
+      });
+    }
+    return finalData;
+  }
+
+function updateStats() {
+  const stats = qk(SELECT Style, SUM(Minutes) / 60 AS Hours FROM Session GROUP BY Style, {subscribe: true, prefetch: off});
+  const gi = stats['Gi'] || 0;
+  const noGi = stats['NoGi'] || 0;
+
+  Total_Gi.displayValue = `${displayNumber(gi)} ${plural('hour', gi)}`;
+  Total_NoGi.displayValue = `${displayNumber(noGi)} ${plural('hour', noGi)}`;
+  Total_All.displayValue = `${displayNumber(gi + noGi)} ${plural('hour', gi + noGi)}`;
+
+  updateCharts();
+}
+
+function updateCharts() {
+  Total_Mat_Time->reloadData();
+}
+
+function getChartStartingDate() {
+  const selectedValue = Chart_Range.displayValue;
+  switch (selectedValue) {
+    case 'Last 7 days':
+      return subDays('c', 7);
+    case 'Last 14 days':
+      return subDays('c', 14);
+    case 'Last 30 days':
+      return subDays('c', 30);
+    case 'Last 3 months':
+      return subMonths('c', 3);
+    case 'Last 6 months':
+      return subMonths('c', 6);
+    case 'Last year':
+      return subYears('c', 1);
+    case 'All time':
+      return parseDate(q(SELECT MIN(Start) FROM Session))
+    default:
+      return subDays('c', 30);
+  }
+}
