@@ -1,5 +1,6 @@
 BeauWest.BJJ_Tracker,
-  app
+  app,
+  db off
 
 Last_Gym_Id,
   cache,

@@ -1,3 +1,4 @@
 BeauWest,
   ns,
-  app
+  app,
+  db off

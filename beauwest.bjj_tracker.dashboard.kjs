@@ -52,16 +52,28 @@ Chart_Range,
 # display
 Hours_In_Range,
   int,
-  displayValue q(SELECT SUM(Minutes) / 60 FROM Session WHERE Start >= :dateTimeStamp(getChartStartingDate()))
+  displayValue (q(SELECT SUM(Minutes) / 60 FROM Session WHERE Start >= :dateTimeStamp(getChartStartingDate())) || '0')
 
 First_Day,
   date,
   caption 'First day of BJJ',
-  displayValue displayDate(q(SELECT MIN(Start) FROM Session))
+  displayValue {
+    const day = q(SELECT MIN(Start) FROM Session);
+    if (day) {
+      return displayDate(day);
+    }
+    return 'Start your journey today!';
+  }
 
 Last_Session,
   string,
-  displayValue formatDistanceToNowStrict(q(SELECT MAX(Start) FROM Session), {@addSuffix: true})
+  displayValue {
+    const day = q(SELECT MAX(Start) FROM Session);
+    if (day) {
+      return formatDistanceToNowStrict(day, {@addSuffix: true});
+    }
+    return 'None, yet.';
+  }
 #
 
 --
