@@ -24,19 +24,19 @@ Add_Session,
 --
 # display, fontScale 2, color '900'
 Total_All,
-  int,
+  string,
   db off,
-  caption 'Total Hours'
+  caption 'All Time'
 
 Total_Gi,
-  int,
+  string,
   db off,
-  caption 'Total Gi Hours'
+  caption 'Total Gi'
 
 Total_NoGi,
-  int,
+  string,
   db off,
-  caption 'Total NoGi Hours'
+  caption 'Total NoGi'
 #
 
 -- 'Quick Stats'

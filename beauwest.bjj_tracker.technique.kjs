@@ -8,6 +8,6 @@ BeauWest.BJJ_Tracker.Technique,
 
 Name
 
-Minutes,
+Hours,
   int,
-  c (SELECT SUM(Minutes) FROM Session WHERE Technique = NEW.Id)
+  c (SELECT SUM(Minutes) / 60 FROM Session WHERE Technique = NEW.Id)
