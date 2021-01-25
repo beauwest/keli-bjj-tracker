@@ -27,6 +27,8 @@ Hours,
 
 Next_Promotion_Date,
   date,
+  vis off,
+  mode off,
   c (SELECT Date
      FROM Promotion
      WHERE Id != NEW.Id
