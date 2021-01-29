@@ -11,8 +11,8 @@ BeauWest.BJJ_Tracker.Dashboard,
     Chart_Range.displayValue = 'Last 30 days';
     updateStats();
   },
-  du(e.table.endsWith('session')) updateStats(),
-  reload(e.table.endsWith('session')) updateStats()
+  du(e?.table?.endsWith('session') && __mode === 'client') updateStats(),
+  reload(e?.table?.endsWith('session') && __mode === 'client') updateStats()
 
 # region 'toolbar'
 Add_Session,
