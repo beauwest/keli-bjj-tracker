@@ -68,7 +68,7 @@ First_Day,
 Last_Session,
   string,
   displayValue {
-    const day = q(SELECT MAX(Start) FROM Session);
+    const day = q(SELECT MAX(End) FROM Session);
     if (day) {
       return formatDistanceToNowStrict(day, {@addSuffix: true});
     }
@@ -115,6 +115,9 @@ function updateStats() {
   Total_Gi.displayValue = `${displayNumber(gi)} ${plural('hour', gi)}`;
   Total_NoGi.displayValue = `${displayNumber(noGi)} ${plural('hour', noGi)}`;
   Total_All.displayValue = `${displayNumber(gi + noGi)} ${plural('hour', gi + noGi)}`;
+  resetParam('Hours_In_Range.displayValue');
+  resetParam('First_Day.displayValue');
+  resetParam('Last_Session.displayValue');
 
   updateCharts();
 }
