@@ -26,17 +26,17 @@ Add_Session,
 Total_All,
   string,
   db off,
-  caption 'All Time'
+  caption 'Mat Time'
 
 Total_Gi,
   string,
   db off,
-  caption 'Total Gi'
+  caption 'Gi'
 
 Total_NoGi,
   string,
   db off,
-  caption 'Total NoGi'
+  caption 'NoGi'
 #
 
 -- 'Quick Stats'
@@ -52,7 +52,7 @@ Chart_Range,
 # display
 Hours_In_Range,
   int,
-  displayValue (q(SELECT SUM(Minutes) / 60 FROM Session WHERE Start >= :dateTimeStamp(getChartStartingDate())) || '0')
+  displayValue displayNumber(q(SELECT SUM(Minutes) / 60 FROM Session WHERE Start >= :dateTimeStamp(getChartStartingDate())) || '0')
 
 First_Day,
   date,
