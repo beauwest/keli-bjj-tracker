@@ -1,4 +1,3 @@
 BeauWest,
-  ns,
-  app,
+  app 'beauwest',
   db off

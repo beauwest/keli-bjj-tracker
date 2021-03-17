@@ -1,5 +1,5 @@
 BeauWest.BJJ_Tracker,
-  app,
+  app 'beauwest',
   db off
 
 Last_Gym_Id,
