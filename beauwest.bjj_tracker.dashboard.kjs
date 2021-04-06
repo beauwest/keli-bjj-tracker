@@ -84,6 +84,7 @@ Total_Mat_Time,
   height 200,
   valueKeys [{name: 'hours', caption: 'Hours', color: '700', background: '100'}],
   labelKeys [{name: 'date'}],
+  options {'scales': {'yAxes': [{'ticks': {'beginAtZero': false}}]}},
   data {
     const startingDate = _p->getChartStartingDate();
     const sessions = qk(WITH sessions AS (SELECT Minutes, LEFT(Start, 10) AS Date FROM Session WHERE Start >= :dateTimeStamp(startingDate))
