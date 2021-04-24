@@ -43,7 +43,7 @@ Total_NoGi,
 Chart_Range,
   string,
   caption 'Range',
-  optionList ['Last 7 days', 'Last 14 days', 'Last 30 days', 'Last 3 months', 'Last 6 months', 'Last year', 'All time'],
+  optionList ['Last 7 days', 'Last 14 days', 'Last 30 days', 'Last 3 months', 'Last 6 months', 'Last 12 months', 'This Year', 'All time'],
   ac {
     resetParam('Hours_In_Range.displayValue');
     updateCharts();
@@ -140,8 +140,10 @@ function getChartStartingDate() {
       return subMonths('c', 3);
     case 'Last 6 months':
       return subMonths('c', 6);
-    case 'Last year':
+    case 'Last 12 months':
       return subYears('c', 1);
+    case 'This Year':
+      return startOfYear('c');
     case 'All time':
       return parseDate(q(SELECT MIN(Start) FROM Session))
     default:
