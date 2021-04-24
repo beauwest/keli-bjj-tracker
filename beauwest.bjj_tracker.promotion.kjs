@@ -22,7 +22,7 @@ Hours,
   c (SELECT SUM(Minutes) / 60
      FROM Session
      WHERE LEFT(Start, 10) >= NEW.Date
-       AND LEFT(Start, 10) < NEW.Next_Promotion_Date
+       AND (NEW.Next_Promotion_Date IS NULL OR LEFT(Start, 10) < NEW.Next_Promotion_Date)
     )
 
 Next_Promotion_Date,
