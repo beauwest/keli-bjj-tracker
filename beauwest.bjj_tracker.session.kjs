@@ -22,9 +22,7 @@ Style_Set_Gi,
   region 'Style_Buttons_1',
   design (Style === 'Gi' ? 'raised' : 'flat'),
   background (Style === 'Gi' ? 'a500' : 'grey300'),
-  ac {
-    Style = 'Gi';
-  }
+  ac Style = 'Gi'
 
 Style_Set_Nogi,
   bu,
@@ -32,13 +30,11 @@ Style_Set_Nogi,
   region 'Style_Buttons_2',
   design (Style === 'NoGi' ? 'raised' : 'flat'),
   background (Style === 'NoGi' ? 'a500' : 'grey300'),
-  ac {
-    Style = 'NoGi';
-  }
+  ac Style = 'NoGi'
 
 Start,
   datetime,
-  ac End = addTime(Start, {hours: 1})
+  ac End = addHours(e.value, 1)
 
 End,
   datetime
