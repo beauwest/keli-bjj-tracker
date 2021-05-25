@@ -73,6 +73,12 @@ Last_Session,
       return formatDistanceToNowStrict(day, {@addSuffix: true});
     }
     return 'None, yet.';
+  },
+  ac {
+    const lastId = q(SELECT Id FROM Session ORDER BY End DESC LIMIT 1);
+    if (lastId) {
+      edit('Session', lastId);
+    }
   }
 #
 
