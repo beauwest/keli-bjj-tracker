@@ -14,11 +14,21 @@ BeauWest.BJJ_Tracker.Dashboard,
   du(e?.table?.endsWith('session') && __mode === 'client') updateStats(),
   reload(e?.table?.endsWith('session') && __mode === 'client') updateStats()
 
-# region 'toolbar'
+# region 'toolbar', bu
 Add_Session,
-  bu,
-  caption 'Add Session',
   ac insert('Session')
+
+Techniques,
+  ac browse('Technique'),
+  icon 'head-sync'
+
+Sessions,
+  ac browse('Session'),
+  icon 'clipboard-text-outline'
+
+Promotions,
+  ac browse('Promotion'),
+  icon 'chevron-triple-up'
 #
 
 --
