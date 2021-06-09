@@ -70,7 +70,9 @@ First_Day,
   displayValue {
     const day = q(SELECT MIN(Start) FROM Session);
     if (day) {
-      return displayDate(day);
+      const duration = intervalToDuration({start: parseDateTime(day), end: dnow()});
+      duration.days = duration.hours = duration.minutes = duration.seconds = 0;
+      return `${formatDateStandard(day, 'MMM do, yyyy')} (${formatDuration(duration)})`;
     }
     return 'Start your journey today!';
   }
