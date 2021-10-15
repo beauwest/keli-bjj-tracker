@@ -29,6 +29,10 @@ Sessions,
 Promotions,
   ac browse('Promotion'),
   icon 'chevron-triple-up'
+
+Calendar,
+  ac browse('Calendar'),
+  icon 'calendar-multiselect'
 #
 
 --

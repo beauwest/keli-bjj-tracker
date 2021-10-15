@@ -1,0 +1,71 @@
+BeauWest.BJJ_Tracker.Calendar,
+  db off,
+  bp mode = 'edit',
+  maximized on,
+  menu,
+  menuCaption 'BJJ Calendar',
+  icon 'calendar-multiselect',
+  caption 'BJJ Calendar',
+  du(e?.table?.endsWith('session') && __mode === 'client') resetParam('Event_Calendar.events'),
+  reload(e?.table?.endsWith('session') && __mode === 'client') resetParam('Event_Calendar.events')
+
+# scopevar
+Calendar_Start_Date, date
+Calendar_End_Date, date
+#
+
+Event_Calendar,
+  calendar,
+  region 'fullpanel',
+  manualDialog,
+  events getCalendarEvents(),
+  uikeliCalendarViewChanged _p->calendarViewChanged(e),
+  uikeliCalendarActivateEvent _p->calendarEventChanged(e),
+  uikeliCalendarEventChanged _p->calendarEventChanged(e)
+
+[Client]
+function calendarEventChanged(event) {
+  const sessionId = event?.detail?.id;
+  if (!sessionId) {
+    return;
+  }
+
+  const exists = q(SELECT Id FROM Session WHERE Id = :sessionId);
+  if (exists) {
+    edit('Session', sessionId);
+  } else {
+    insert('Session');
+  }
+}
+
+[Client, Server]
+function getCalendarEvents() {
+  let startDate = Calendar_Start_Date;
+  let endDate = Calendar_End_Date;
+  if (!startDate) {
+    startDate = subWeeks(startOfMonth('c'), 1);
+  }
+  if (!endDate) {
+    endDate = addWeeks(endOfMonth('c'), 1);
+  }
+
+  const events = query(SELECT
+                         Id, Start, End, Style, Technique.Name AS Technique
+                       FROM Session
+                       WHERE Start >= :dateTimeStamp(startDate) AND End <= :dateTimeStamp(endDate)
+                       ORDER BY Start DESC, {subscribe: true});
+  for (const event of events) {
+    event.text = `${event.Style}: ${event.Technique}`;
+    event.start_date = parseDateTime(event.Start);
+    event.end_date = parseDateTime(event.End);
+    event.color = (event.Style === 'NoGi' ? 'a700' : '700');
+  }
+  return events;
+}
+
+[Client]
+function calendarViewChanged(event) {
+  Calendar_Start_Date = event.detail.start;
+  Calendar_End_Date = event.detail.end;
+  resetParam('Event_Calendar.events');
+}
