@@ -55,7 +55,7 @@ function getCalendarEvents() {
                        WHERE Start >= :dateTimeStamp(startDate) AND End <= :dateTimeStamp(endDate)
                        ORDER BY Start DESC, {subscribe: true});
   for (const event of events) {
-    event.text = `${event.Style}: ${event.Technique}`;
+    event.text = `${event.Style || 'BJJ'}: ${event.Technique || 'Rolling'}`;
     event.start_date = parseDateTime(event.Start);
     event.end_date = parseDateTime(event.End);
     event.color = (event.Style === 'NoGi' ? 'a700' : '700');
