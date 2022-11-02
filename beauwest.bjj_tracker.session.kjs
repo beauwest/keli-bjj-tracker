@@ -42,6 +42,10 @@ Minutes,
   int,
   c (SELECT (EXTRACT(EPOCH FROM (CAST(End AS timestamp) - CAST(Start AS timestamp))) / 60))
 
+Day,
+  string,
+  c (SELECT TO_CHAR(CAST(NEW.Start AS date), 'Day'))
+
 Technique.Name,
   caption 'Primary Technique'
 
