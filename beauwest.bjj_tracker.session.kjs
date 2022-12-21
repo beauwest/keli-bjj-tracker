@@ -33,7 +33,10 @@ Style_Set_Nogi,
 
 Start,
   datetime,
-  ac End = addHours(e.value, 1)
+  ac {
+    End = addHours(e.value, 1);
+    Gym = getGymBasedOnHistory(e.value);
+  }
 
 End,
   datetime
@@ -44,7 +47,7 @@ Minutes,
 
 Day,
   string,
-  c (SELECT TO_CHAR(CAST(NEW.Start AS date), 'Day'))
+  c (SELECT TRIM(TO_CHAR(CAST(NEW.Start AS date), 'Day')))
 
 Technique.Name,
   caption 'Primary Technique'
@@ -57,3 +60,22 @@ Gym.Name
 
 Notes,
   text
+
+[Client, Server]
+function getGymBasedOnHistory(dateValue) {
+  const dayOfWeek = formatDateStandard(dateValue, 'EEEE');
+  const mostRecentId = q(WITH
+    recent AS (
+      SELECT
+        Gym.Id AS Id
+      FROM Session
+      WHERE Id != :Id
+        AND Gym.Id IS NOT NULL
+        AND Day = :dayOfWeek
+      ORDER BY Start DESC
+      LIMIT 5
+    )
+    SELECT Id FROM recent GROUP BY Id ORDER BY COUNT(1) DESC LIMIT 1
+  );
+  return mostRecentId || Last_Gym_Id;
+}
